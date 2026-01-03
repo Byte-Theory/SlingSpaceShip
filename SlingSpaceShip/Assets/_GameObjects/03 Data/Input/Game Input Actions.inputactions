@@ -1,0 +1,55 @@
+{
+    "version": 1,
+    "name": "Game Input Actions",
+    "maps": [
+        {
+            "name": "Player action map",
+            "id": "8f1aae37-f8f6-46b7-93a7-92b146225572",
+            "actions": [
+                {
+                    "name": "Mouse Position",
+                    "type": "Value",
+                    "id": "4ad68ca1-0e2a-41b7-9cdb-4b50873b99fb",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Mouse Left Tap",
+                    "type": "Button",
+                    "id": "5d7b197e-f040-4f90-a881-8a7788b96771",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "78697efe-26ec-4883-8d01-1c41a5356803",
+                    "path": "<Mouse>/position",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Mouse Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d6858323-94a9-461f-b5e7-1bdbc05066e3",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Mouse Left Tap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
