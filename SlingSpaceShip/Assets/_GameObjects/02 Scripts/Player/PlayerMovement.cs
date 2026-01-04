@@ -53,6 +53,8 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         
+        EnablePhysics(false);
+        
         isUserInputActive = true;
     }
 
@@ -63,6 +65,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnUserEnded(Vector2 direction, float magnitude)
     {
+        EnablePhysics(true);
+        
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         
