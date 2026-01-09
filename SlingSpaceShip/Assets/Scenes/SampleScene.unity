@@ -354,7 +354,7 @@ GameObject:
   - component: {fileID: 264860825}
   - component: {fileID: 264860824}
   - component: {fileID: 264860823}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Seeker (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -373,8 +373,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4108c1c1a5ebc74ba51ca847c4fa5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  target: {fileID: 2039361114}
-  moveSpeed: 20
+  target: {fileID: 1629912049}
+  moveSpeed: 10
+  turnSpeed: 2.5
+  turnDist: 2
+  stoppingDist: 3
 --- !u!65 &264860824
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -903,7 +906,7 @@ GameObject:
   - component: {fileID: 523014730}
   - component: {fileID: 523014729}
   - component: {fileID: 523014728}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Seeker (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -922,8 +925,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4108c1c1a5ebc74ba51ca847c4fa5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  target: {fileID: 2039361114}
-  moveSpeed: 20
+  target: {fileID: 1629912049}
+  moveSpeed: 10
+  turnSpeed: 2.5
+  turnDist: 2
+  stoppingDist: 3
 --- !u!65 &523014729
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1362,7 +1368,7 @@ GameObject:
   - component: {fileID: 742033537}
   - component: {fileID: 742033536}
   - component: {fileID: 742033535}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Seeker (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1381,8 +1387,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4108c1c1a5ebc74ba51ca847c4fa5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  target: {fileID: 2039361114}
-  moveSpeed: 20
+  target: {fileID: 1629912049}
+  moveSpeed: 10
+  turnSpeed: 2.5
+  turnDist: 2
+  stoppingDist: 3
 --- !u!65 &742033536
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1504,17 +1513,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0269739ebceec0a44bc3186ffe8d6de7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Grid
-  playerT: {fileID: 1629912049}
-  unwalkableLayerMask:
+  displayGridGizmos: 0
+  unwalkableMask:
     serializedVersion: 2
     m_Bits: 64
-  gridWorldSize: {x: 249.5, y: 125.5}
-  nodeSize: 1
-  allTerrainTypes: []
-  walkableMask:
-    serializedVersion: 2
-    m_Bits: 0
-  showGridGizmo: 0
+  gridWorldSize: {x: 250, y: 126}
+  nodeRadius: 1.5
+  walkableRegions: []
+  obstacleProximityPenalty: 10
 --- !u!4 &785065962
 Transform:
   m_ObjectHideFlags: 0
@@ -2591,7 +2597,7 @@ GameObject:
   - component: {fileID: 1631284026}
   - component: {fileID: 1631284025}
   - component: {fileID: 1631284028}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Seeker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2702,8 +2708,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4108c1c1a5ebc74ba51ca847c4fa5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  target: {fileID: 2039361114}
-  moveSpeed: 20
+  target: {fileID: 1629912049}
+  moveSpeed: 10
+  turnSpeed: 2.5
+  turnDist: 2
+  stoppingDist: 3
 --- !u!1 &1640624437
 GameObject:
   m_ObjectHideFlags: 0
@@ -2749,7 +2758,7 @@ GameObject:
   - component: {fileID: 1645151464}
   - component: {fileID: 1645151463}
   - component: {fileID: 1645151462}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Seeker (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2768,8 +2777,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4108c1c1a5ebc74ba51ca847c4fa5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  target: {fileID: 2039361114}
-  moveSpeed: 20
+  target: {fileID: 1629912049}
+  moveSpeed: 10
+  turnSpeed: 2.5
+  turnDist: 2
+  stoppingDist: 3
 --- !u!65 &1645151463
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3208,7 +3220,7 @@ GameObject:
   - component: {fileID: 1836744284}
   - component: {fileID: 1836744283}
   - component: {fileID: 1836744282}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Seeker (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3227,8 +3239,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4108c1c1a5ebc74ba51ca847c4fa5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  target: {fileID: 2039361114}
-  moveSpeed: 20
+  target: {fileID: 1629912049}
+  moveSpeed: 10
+  turnSpeed: 2.5
+  turnDist: 2
+  stoppingDist: 3
 --- !u!65 &1836744283
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3556,7 +3571,7 @@ GameObject:
   - component: {fileID: 2009625708}
   - component: {fileID: 2009625707}
   - component: {fileID: 2009625706}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Seeker (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3575,8 +3590,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4108c1c1a5ebc74ba51ca847c4fa5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  target: {fileID: 2039361114}
-  moveSpeed: 20
+  target: {fileID: 1629912049}
+  moveSpeed: 10
+  turnSpeed: 2.5
+  turnDist: 2
+  stoppingDist: 3
 --- !u!65 &2009625707
 BoxCollider:
   m_ObjectHideFlags: 0

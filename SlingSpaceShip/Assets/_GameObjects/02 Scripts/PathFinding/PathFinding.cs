@@ -7,25 +7,14 @@ using System.Linq;
 public class PathFinding : MonoBehaviour
 {
     [SerializeField] private Grid grid;
-    private PathRequestManager pathRequestManager;
-
-    private void Start()
-    {
-        pathRequestManager = PathRequestManager.Instance;
-    }
-
-    public void StartFindPath(Vector3 startPos, Vector3 targetPos)
-    {
-        StartCoroutine(FindPath(startPos, targetPos));
-    }
  
-    private IEnumerator FindPath(Vector3 startPos, Vector3 targetPos)
+    public void FindPath(PathRequest request, Action<PathResult> callback)
     {
         Vector3[] wayPoints = new Vector3[0];
         bool isSuccess = false;
         
-        Node startNode = grid.NodeFromWorldPoint(startPos);
-        Node targetNode = grid.NodeFromWorldPoint(targetPos);
+        Node startNode = grid.NodeFromWorldPoint(request.pathStart);
+        Node targetNode = grid.NodeFromWorldPoint(request.pathEnd);
 
         if (startNode.walkable && targetNode.walkable)
         {
@@ -73,15 +62,16 @@ public class PathFinding : MonoBehaviour
                 }
             }
         }
-
-        yield return null;
-
+        
         if (isSuccess)
         {
             wayPoints = RetracePath(startNode, targetNode);
+            
+            isSuccess = wayPoints.Length > 0;
         }
         
-        pathRequestManager.FinishedProcessingPath(wayPoints, isSuccess);
+        PathResult pathResult = new PathResult(wayPoints, isSuccess, request.callback);
+        callback?.Invoke(pathResult);
     }
 
     private Vector3[] RetracePath(Node startNode, Node endNode)
