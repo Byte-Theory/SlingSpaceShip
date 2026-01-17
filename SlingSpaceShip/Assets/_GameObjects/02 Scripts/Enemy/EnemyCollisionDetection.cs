@@ -39,7 +39,7 @@ public class EnemyCollisionDetection : MonoBehaviour
         EnemyStates enemyState = enemy.enemyStateManager.GetCurrentState();
         float dist = Vector3.Distance(transform.position, playerT.position);
         
-        if (dist < Constants.EnemyData.PlayerDetectionRange)
+        if (dist < Constants.EnemyData.PlayerDetectionRange && dist >= Constants.EnemyData.StoppingRange)
         {
             Vector3 dir = playerT.position - transform.position;
             dir.Normalize();
@@ -56,7 +56,8 @@ public class EnemyCollisionDetection : MonoBehaviour
                 }
             }
         }
-        else if (enemyState >= EnemyStates.ChasingPlayer)
+        
+        if (enemyState >= EnemyStates.ChasingPlayer)
         {
             if (dist > Constants.EnemyData.PlayerFollowRange)
             {
@@ -124,7 +125,7 @@ public class EnemyCollisionDetection : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, Constants.EnemyData.PlayerShootingRange);
+        Gizmos.DrawWireSphere(transform.position, Constants.EnemyData.StoppingRange);
         
         Gizmos.color = Color.brown;
         Gizmos.DrawWireSphere(transform.position, Constants.EnemyData.PlayerDetectionRange);

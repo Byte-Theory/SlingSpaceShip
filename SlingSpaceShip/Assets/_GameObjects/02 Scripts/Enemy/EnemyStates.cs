@@ -6,5 +6,5 @@ public enum EnemyStates
     Idle,
     Patrolling,
     ChasingPlayer,
-    ShootingAtPlayer
+    ChaseComplete
 }

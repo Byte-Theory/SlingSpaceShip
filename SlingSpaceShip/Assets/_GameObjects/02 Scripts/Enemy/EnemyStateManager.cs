@@ -167,9 +167,8 @@ public class EnemyStateManager : MonoBehaviour
             }
                 break;
             
-            case EnemyStates.ShootingAtPlayer:
+            case EnemyStates.ChaseComplete:
             {
-                enemy.enemyMovement.StopPathMovement();
                 enemy.enemyMovement.TriggerOscillateContainerUpAndDown(true, 0.65f, 0.25f);
             }
                 break;
@@ -207,6 +206,10 @@ public class EnemyStateManager : MonoBehaviour
         {
             enemy.enemyMovement.UpdatePatrollingMovement();
         }
+        else if(enemyState == EnemyStates.ChaseComplete)
+        {
+            enemy.enemyMovement.RotateTowardsTarget();
+        }
     }
 
     #endregion
@@ -218,6 +221,10 @@ public class EnemyStateManager : MonoBehaviour
         if (enemyState == EnemyStates.GoingBackToSpawn)
         {
             UpdateState(EnemyStates.MovingToIdle);
+        }
+        else if (enemyState == EnemyStates.ChasingPlayer)
+        {
+            UpdateState(EnemyStates.ChaseComplete);
         }
     }
 

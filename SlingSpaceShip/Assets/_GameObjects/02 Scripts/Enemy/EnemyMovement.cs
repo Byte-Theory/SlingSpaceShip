@@ -237,7 +237,7 @@ public class EnemyMovement : MonoBehaviour
     private IEnumerator FollowPath()
     {
         EnemyStates enemyStates = enemy.enemyStateManager.GetCurrentState();
-        stoppingDist = enemyStates == EnemyStates.ChasingPlayer ? Constants.EnemyData.PlayerShootingRange : 1.0f;
+        stoppingDist = enemyStates == EnemyStates.ChasingPlayer ? Constants.EnemyData.StoppingRange : 1.0f;
         
         bool followingPath = true;
         int pathIndex = 0;
@@ -246,7 +246,7 @@ public class EnemyMovement : MonoBehaviour
         dir.Normalize();
         float finalRotationAngleZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         Quaternion finalRotation = Quaternion.Euler(0.0f, 0.0f, finalRotationAngleZ);
-        transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.deltaTime * 50.0f);
+        transform.rotation = finalRotation;
 
         float speedPercent = 1.0f;
         
@@ -284,7 +284,7 @@ public class EnemyMovement : MonoBehaviour
                 dir.Normalize();
                 finalRotationAngleZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
                 finalRotation = Quaternion.Euler(0.0f, 0.0f, finalRotationAngleZ);
-                transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.deltaTime * 50.0f);
+                transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.deltaTime * 10.0f);
                 
                 transform.Translate(Vector3.right * moveSpeed * speedPercent * Time.deltaTime, Space.Self);
             }
@@ -347,6 +347,15 @@ public class EnemyMovement : MonoBehaviour
     
     #region Rotation
 
+    public void RotateTowardsTarget()
+    {
+        Vector3 dir = target.transform.position - transform.position;
+        dir.Normalize();
+        float finalRotationAngleZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        Quaternion finalRotation = Quaternion.Euler(0.0f, 0.0f, finalRotationAngleZ);
+        transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.deltaTime * 10.0f);
+    }
+    
     private void UpdateContainerRotation()
     {
         Vector3 lookDir = transform.right;

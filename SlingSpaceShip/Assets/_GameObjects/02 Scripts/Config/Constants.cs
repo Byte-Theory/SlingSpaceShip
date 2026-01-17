@@ -16,7 +16,7 @@ public static class Constants
         public static readonly float MaxPetrolHorizontalDist = 20.0f;
         
         // Range
-        public static readonly float PlayerShootingRange = 10.0f;
+        public static readonly float StoppingRange = 7.5f;
         public static readonly float PlayerDetectionRange = 35.0f;
         public static readonly float PlayerFollowRange = 70.0f;
     }
