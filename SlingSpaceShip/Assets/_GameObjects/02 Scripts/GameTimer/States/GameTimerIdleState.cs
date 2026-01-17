@@ -11,6 +11,8 @@ public class GameTimerIdleState : GameTimerBaseState
         gameTimerStateContext.ResetData();
 
         Time.timeScale = 1.0f;
+        
+        cameraFollow.MovePivotToFarPos();
     }
     
     public override void UpdateState(GameTimerStateContext context, float deltaTime)

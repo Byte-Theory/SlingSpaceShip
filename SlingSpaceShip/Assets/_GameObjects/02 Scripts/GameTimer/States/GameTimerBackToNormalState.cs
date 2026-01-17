@@ -17,6 +17,7 @@ public class GameTimerBackToNormalState : GameTimerBaseState
         gameTimerStateContext.stateEndFloat = 1.0f;
         
         postProcessingManager.AnimateTimeBackToNormal();
+        cameraFollow.MovePivotToFarPos();
     }
     
     public override void UpdateState(GameTimerStateContext context, float deltaTime)

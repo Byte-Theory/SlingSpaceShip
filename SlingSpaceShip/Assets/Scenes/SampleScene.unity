@@ -2117,6 +2117,10 @@ MonoBehaviour:
   followTarget: {fileID: 1629912049}
   followTargetOffset: {x: 0, y: 0, z: 0}
   smoothTime: 0.05
+  pivotT: {fileID: 259906879}
+  nearPivotPos: {x: 0, y: 6, z: -30}
+  farPivotPos: {x: 0, y: 9, z: -46.8}
+  pivotMoveSpeed: 10
 --- !u!4 &1507271732
 Transform:
   m_ObjectHideFlags: 0

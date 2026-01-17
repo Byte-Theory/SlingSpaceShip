@@ -17,6 +17,7 @@ public class GameTimerSlowingDownState : GameTimerBaseState
         gameTimerStateContext.stateEndFloat = Constants.GameTimerData.SlowDownTimeScale;
         
         postProcessingManager.AnimateTimeSlowDown();
+        cameraFollow.MovePivotToNearPos();
     }
     
     public override void UpdateState(GameTimerStateContext context, float deltaTime)
