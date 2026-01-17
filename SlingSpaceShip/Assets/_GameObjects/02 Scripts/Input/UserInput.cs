@@ -11,12 +11,18 @@ public class UserInput : MonoBehaviour
     InputAction mousePositionAction;
     InputAction mouseLeftTapHoldAction;
 
+    // Actions
     public static Action UserTapStarted;
     public static Action<Vector2> UserTapped;
     public static Action<Vector2, float> UserTapEnded;
     
+    // Ref
+    private GameTimerManager gameTimerManager;
+    
     private void Start()
     {
+        gameTimerManager = GameTimerManager.Instance;
+        
         mousePositionAction = InputSystem.actions.FindAction("Mouse Position");
         mouseLeftTapHoldAction = InputSystem.actions.FindAction("Mouse Left Tap");
     }
@@ -29,6 +35,8 @@ public class UserInput : MonoBehaviour
             mouseStartPosition = mousePositionAction.ReadValue<Vector2>();
             
             UserTapStarted?.Invoke();
+            
+            gameTimerManager.SetSlowTimeScale();
         }
 
         if (mouseLeftTapHoldAction.IsPressed())
@@ -52,6 +60,8 @@ public class UserInput : MonoBehaviour
             dir.Normalize();
             
             UserTapEnded?.Invoke(dir, delta);
+            
+            gameTimerManager.SetNormalTimeScale();
         }
     }
 }
