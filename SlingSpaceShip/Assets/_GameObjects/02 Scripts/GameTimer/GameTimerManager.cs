@@ -8,16 +8,12 @@ public class GameTimerManager : MonoBehaviour
     [SerializeField] private float timeScaleChangeDur = 0.15f;
 
     // States
-    private GameTimerState gameTimerState = GameTimerState.Unknown;
-    private float timeElapsedSinceLastUpdate = 0.0f;
+    private StateMachine<GameTimerStateContext> stateMachine;
+    private GameTimerStateContext gameTimerStateContext;
+    private GameTimerIdleState gameTimerIdleState;
+    private GameTimerBackToNormalState gameTimerBackToNormalState;
+    private GameTimerSlowingDownState gameTimerSlowingDownState;
     
-    // Time Scale Data
-    private float timeScaleCurrrent = 1.0f;
-    private float timeScaleTarget = 1.0f;
-    
-    private readonly float normalTimeScale = 1.0f;
-    private readonly float slowDownTimeScale = 0.35f;
-
     #region Singlton
 
     public static GameTimerManager Instance;
@@ -45,118 +41,66 @@ public class GameTimerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateStateTimer();
+        stateMachine.UpdateState(Time.deltaTime);
     }
 
     #region SetUp
 
     public void SetUp()
     {
-        SetState(GameTimerState.Idle);
+        SetUpStateMachine();
+        SetIdleState();
     }
 
     #endregion
 
     #region States
 
-    private void SetState(GameTimerState newState)
+    private void SetUpStateMachine()
     {
-        if (newState == gameTimerState)
+        gameTimerStateContext = new GameTimerStateContext
         {
-            return;
-        }
+            timeElapsed = 0.0f,
+            stateDuration = timeScaleChangeDur,
+            stateAnimationCurve = timeScaleSlowDownCurve
+        };
 
-        SetStateData(newState);
-        
-        gameTimerState = newState;
-        timeElapsedSinceLastUpdate = 0.0f;
+        stateMachine = new StateMachine<GameTimerStateContext>(gameTimerStateContext);
+
+        gameTimerIdleState = new GameTimerIdleState(gameTimerStateContext);
+        gameTimerBackToNormalState = new GameTimerBackToNormalState(gameTimerStateContext, gameTimerIdleState);
+        gameTimerSlowingDownState = new GameTimerSlowingDownState(gameTimerStateContext, null);
+
+        gameTimerStateContext.RequestStateChange = stateMachine.SetState;
     }
 
-    private void SetStateData(GameTimerState newState)
+    private void SetIdleState()
     {
-        if (newState == GameTimerState.Idle)
-        {
-            UpdateTimeScale(normalTimeScale, true);
-        }
-        else if (newState == GameTimerState.GoingBackToIdle)
-        {
-            UpdateTimeScale(normalTimeScale);
-        }
-        else if (newState == GameTimerState.SlowingDownTime)
-        {
-            UpdateTimeScale(slowDownTimeScale);
-        }
-    }
-
-    private void UpdateStateTimer()
-    {
-        if (gameTimerState == GameTimerState.GoingBackToIdle)
-        {
-            timeElapsedSinceLastUpdate += Time.deltaTime;
-            
-            if (timeElapsedSinceLastUpdate < timeScaleChangeDur)
-            {
-                float fac = timeElapsedSinceLastUpdate / timeScaleChangeDur;
-                float timeScale = Mathf.Lerp(timeScaleCurrrent, timeScaleTarget, fac);
-                UpdateUnityTimeScale(timeScale);
-            }
-            else
-            {
-                UpdateUnityTimeScale(1.0f);
-                SetState(GameTimerState.Idle);
-            }
-        }
-        else if (gameTimerState == GameTimerState.SlowingDownTime)
-        {
-            timeElapsedSinceLastUpdate += Time.deltaTime;
-            
-            if (timeElapsedSinceLastUpdate < timeScaleChangeDur)
-            {
-                float fac = timeElapsedSinceLastUpdate / timeScaleChangeDur;
-                float delta = timeScaleSlowDownCurve.Evaluate(fac);
-                float timeScale = Mathf.Lerp(timeScaleCurrrent, timeScaleTarget, delta);
-                UpdateUnityTimeScale(timeScale);
-            }
-            else
-            {
-                UpdateUnityTimeScale(slowDownTimeScale);
-            }
-        }
+        stateMachine.SetState(gameTimerIdleState);
     }
 
     #endregion
     
-    #region Update Time Scale
-
-    private void UpdateTimeScale(float value, bool isInstant = false)
-    {
-        timeScaleCurrrent = Time.timeScale;
-        timeScaleTarget = value;
-        
-        if (isInstant)
-        {
-            timeScaleCurrrent = timeScaleTarget;
-            UpdateUnityTimeScale(timeScaleCurrrent);
-        }
-    }
-
-    private void UpdateUnityTimeScale(float val)
-    {
-        Time.timeScale = val;
-    }
-    
-    #endregion
-
     #region Helpers
 
     public void SetSlowTimeScale()
     {
-        SetState(GameTimerState.SlowingDownTime);
+        stateMachine.SetState(gameTimerSlowingDownState);
     }
     
     public void SetNormalTimeScale()
     {
-        SetState(GameTimerState.GoingBackToIdle);
+        stateMachine.SetState(gameTimerBackToNormalState);
+    }
+
+    #endregion
+
+    #region Getter
+
+    public bool IsInSlowDownState()
+    {
+        var slowState = stateMachine.GetState<GameTimerSlowingDownState>();
+        return slowState != null;
     }
 
     #endregion

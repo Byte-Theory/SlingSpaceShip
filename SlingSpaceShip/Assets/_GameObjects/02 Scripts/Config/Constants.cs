@@ -20,4 +20,9 @@ public static class Constants
         public static readonly float PlayerDetectionRange = 35.0f;
         public static readonly float PlayerFollowRange = 70.0f;
     }
+
+    public static class GameTimerData
+    {
+        public static readonly float SlowDownTimeScale = 0.3f;
+    }
 }

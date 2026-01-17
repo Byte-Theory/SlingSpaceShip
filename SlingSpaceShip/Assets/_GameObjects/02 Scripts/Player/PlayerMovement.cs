@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -108,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isUserInputActive)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.deltaTime * 20.0f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.unscaledDeltaTime * 20.0f);
         }
         else
         {
@@ -130,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             finalRotation = Quaternion.Euler(0.0f, 0.0f, finalRotationAngleZ);
-            transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.deltaTime * 50.0f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.unscaledDeltaTime * 50.0f);
         }
     }
 
