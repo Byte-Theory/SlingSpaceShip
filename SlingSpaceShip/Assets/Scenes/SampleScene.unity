@@ -2143,6 +2143,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1537159856}
   - component: {fileID: 1537159855}
+  - component: {fileID: 1537159857}
   m_Layer: 0
   m_Name: PostProcessing
   m_TagString: Untagged
@@ -2182,6 +2183,76 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1537159857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537159854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab471a571268bfe48892fbd5b7e4f480, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PostProcessingManager
+  minChromaticAbIntensity: 0.1
+  maxChromaticAbIntensity: 1
+  chromaticAbChangeSpeed: 5
+  minVignetteIntensity: 0
+  maxVignetteIntensity: 0.5
+  vignetteChangeSpeed: 5
+  lensDistortionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1.2
+      outSlope: 1.2
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.25
+      value: 0.3
+      inSlope: 0.00049229077
+      outSlope: 0.00049229077
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.105911314
+    - serializedVersion: 3
+      time: 0.6
+      value: -0.3
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.21674871
+    - serializedVersion: 3
+      time: 0.85
+      value: 0.15
+      inSlope: 0.026484044
+      outSlope: 0.026484044
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.31034476
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1.0000002
+      outSlope: -1.0000002
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  lensDistortionChangeDur: 0.5
 --- !u!1 &1538391963
 GameObject:
   m_ObjectHideFlags: 0

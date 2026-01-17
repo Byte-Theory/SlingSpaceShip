@@ -23,6 +23,6 @@ public static class Constants
 
     public static class GameTimerData
     {
-        public static readonly float SlowDownTimeScale = 0.3f;
+        public static readonly float SlowDownTimeScale = 0.2f;
     }
 }

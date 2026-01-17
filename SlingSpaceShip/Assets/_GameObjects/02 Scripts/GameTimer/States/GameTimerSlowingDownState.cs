@@ -15,6 +15,8 @@ public class GameTimerSlowingDownState : GameTimerBaseState
         
         gameTimerStateContext.stateStartFloat = Time.timeScale;
         gameTimerStateContext.stateEndFloat = Constants.GameTimerData.SlowDownTimeScale;
+        
+        postProcessingManager.AnimateTimeSlowDown();
     }
     
     public override void UpdateState(GameTimerStateContext context, float deltaTime)

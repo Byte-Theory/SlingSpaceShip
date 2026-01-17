@@ -49,10 +49,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnUserTapStarted()
     {
-        rb.linearVelocity = Vector3.zero;
+        //rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         
-        EnablePhysics(false);
+        EnablePhysics(true);
         
         isUserInputActive = true;
     }

@@ -15,6 +15,8 @@ public class GameTimerBackToNormalState : GameTimerBaseState
         
         gameTimerStateContext.stateStartFloat = Time.timeScale;
         gameTimerStateContext.stateEndFloat = 1.0f;
+        
+        postProcessingManager.AnimateTimeBackToNormal();
     }
     
     public override void UpdateState(GameTimerStateContext context, float deltaTime)
