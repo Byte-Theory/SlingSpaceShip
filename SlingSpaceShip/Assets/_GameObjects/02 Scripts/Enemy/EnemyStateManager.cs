@@ -59,9 +59,18 @@ public class EnemyStateManager : MonoBehaviour
     {
         switch (newState)
         {
+            case EnemyStates.GoingBackToSpawn:
+            {
+                enemy.enemyMovement.StopPathMovement();
+                enemy.enemyMovement.TriggerOscillateContainerUpAndDown(false, 0.0f, 0.0f);
+                
+                enemy.enemyMovement.GoBackToSpawn();
+            }
+                break;
+            
             case EnemyStates.MovingToIdle:
             {
-                enemy.enemyMovement.StopChasingPlayer();
+                enemy.enemyMovement.StopPathMovement();
                 enemy.enemyMovement.TriggerOscillateContainerUpAndDown(false, 0.0f, 0.0f);
                 
                 bool isGroundBelow = enemy.enemyCollisionDetection.DetectGroundBelow(out float distToGround);
@@ -108,7 +117,7 @@ public class EnemyStateManager : MonoBehaviour
             
             case EnemyStates.Idle:
             {
-                enemy.enemyMovement.StopChasingPlayer();
+                enemy.enemyMovement.StopPathMovement();
                 enemy.enemyMovement.TriggerOscillateContainerUpAndDown(true, 0.65f, 0.25f);
                 stateDuration = Random.Range(Constants.EnemyData.IdleDuration.x, Constants.EnemyData.IdleDuration.y);
             }
@@ -145,7 +154,7 @@ public class EnemyStateManager : MonoBehaviour
                     leftPos.x -= Constants.EnemyData.MaxPetrolHorizontalDist;
                 }
                 
-                enemy.enemyMovement.StopChasingPlayer();
+                enemy.enemyMovement.StopPathMovement();
                 enemy.enemyMovement.TriggerOscillateContainerUpAndDown(true, 1.0f, 0.35f);
                 enemy.enemyMovement.SetPatrollingData(curPos, leftPos, rightPos);
             }
@@ -160,7 +169,7 @@ public class EnemyStateManager : MonoBehaviour
             
             case EnemyStates.ShootingAtPlayer:
             {
-                enemy.enemyMovement.StopChasingPlayer();
+                enemy.enemyMovement.StopPathMovement();
                 enemy.enemyMovement.TriggerOscillateContainerUpAndDown(true, 0.65f, 0.25f);
             }
                 break;
@@ -202,6 +211,18 @@ public class EnemyStateManager : MonoBehaviour
 
     #endregion
 
+    #region Path Movement Callbacks
+
+    public void PathMovementCompleted()
+    {
+        if (enemyState == EnemyStates.GoingBackToSpawn)
+        {
+            UpdateState(EnemyStates.MovingToIdle);
+        }
+    }
+
+    #endregion
+    
     #region Getter / Setter
 
     public EnemyStates GetCurrentState()

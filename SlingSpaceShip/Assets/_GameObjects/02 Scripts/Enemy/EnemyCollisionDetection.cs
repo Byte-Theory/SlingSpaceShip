@@ -39,23 +39,20 @@ public class EnemyCollisionDetection : MonoBehaviour
         EnemyStates enemyState = enemy.enemyStateManager.GetCurrentState();
         float dist = Vector3.Distance(transform.position, playerT.position);
         
-        if (enemyState < EnemyStates.ChasingPlayer)
+        if (dist < Constants.EnemyData.PlayerDetectionRange)
         {
-            if (dist < Constants.EnemyData.PlayerDetectionRange)
-            {
-                Vector3 dir = playerT.position - transform.position;
-                dir.Normalize();
+            Vector3 dir = playerT.position - transform.position;
+            dir.Normalize();
             
-                Physics.Raycast(transform.position, dir, out RaycastHit hit, 1000, playerLayer);
+            Physics.Raycast(transform.position, dir, out RaycastHit hit, 1000, playerLayer);
 
-                if (hit.collider != null)
+            if (hit.collider != null)
+            {
+                PlayerMovement playerMovement = hit.collider.GetComponent<PlayerMovement>();
+
+                if (playerMovement != null)
                 {
-                    PlayerMovement playerMovement = hit.collider.GetComponent<PlayerMovement>();
-
-                    if (playerMovement != null)
-                    {
-                        enemy.enemyStateManager.UpdateState(EnemyStates.ChasingPlayer);
-                    }
+                    enemy.enemyStateManager.UpdateState(EnemyStates.ChasingPlayer);
                 }
             }
         }
@@ -63,7 +60,7 @@ public class EnemyCollisionDetection : MonoBehaviour
         {
             if (dist > Constants.EnemyData.PlayerFollowRange)
             {
-                enemy.enemyStateManager.UpdateState(EnemyStates.MovingToIdle);
+                enemy.enemyStateManager.UpdateState(EnemyStates.GoingBackToSpawn);
             }
         }
     }
@@ -126,6 +123,9 @@ public class EnemyCollisionDetection : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, Constants.EnemyData.PlayerShootingRange);
+        
         Gizmos.color = Color.brown;
         Gizmos.DrawWireSphere(transform.position, Constants.EnemyData.PlayerDetectionRange);
         

@@ -43,6 +43,8 @@ public class EnemyMovement : MonoBehaviour
     
     // Orientation Data
     private float containerXRotation;
+
+    private Vector3 SpawnPos;
     
     private const float pathUpdateMoveThreshold = 0.5f;
     private const float minPathUpdateDelay = 0.5f;
@@ -50,7 +52,7 @@ public class EnemyMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        stoppingDist = Constants.EnemyData.PlayerShootingRange;
+        SpawnPos = transform.position;
     }
 
     private void Update()
@@ -158,10 +160,14 @@ public class EnemyMovement : MonoBehaviour
             StopCoroutine(updatePathCoroutine);
         }
         
-        updatePathCoroutine = StartCoroutine(UpdatePath());
+        updatePathCoroutine = StartCoroutine(UpdatePathToTarget());
     }
 
-    public void StopChasingPlayer()
+    #endregion
+
+    #region Path Finding
+    
+    public void StopPathMovement()
     {
         if (updatePathCoroutine != null)
         {
@@ -191,7 +197,7 @@ public class EnemyMovement : MonoBehaviour
         }
     }
     
-    private IEnumerator UpdatePath()
+    private IEnumerator UpdatePathToTarget()
     {
         if (Time.timeSinceLevelLoad < 0.3f)
         {    
@@ -217,64 +223,94 @@ public class EnemyMovement : MonoBehaviour
         }
     }
     
-    private IEnumerator FollowPath()
-        {
-            bool followingPath = true;
-            int pathIndex = 0;
-            
-            Vector3 dir = travelPath.lookPoints[0] - transform.position;
-            dir.Normalize();
-            float finalRotationAngleZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            Quaternion finalRotation = Quaternion.Euler(0.0f, 0.0f, finalRotationAngleZ);
-            transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.deltaTime * 50.0f);
+    private IEnumerator UpdatePathToSpawn()
+    {
+        if (Time.timeSinceLevelLoad < 0.3f)
+        {    
+            yield return new WaitForSeconds(0.3f);
+        }
+        
+        PathRequest request = new PathRequest(transform.position, SpawnPos, OnPathFound);
+        PathRequestManager.RequestPath(request);
+    }
     
-            float speedPercent = 1.0f;
-            
-            while (followingPath)
+    private IEnumerator FollowPath()
+    {
+        EnemyStates enemyStates = enemy.enemyStateManager.GetCurrentState();
+        stoppingDist = enemyStates == EnemyStates.ChasingPlayer ? Constants.EnemyData.PlayerShootingRange : 1.0f;
+        
+        bool followingPath = true;
+        int pathIndex = 0;
+        
+        Vector3 dir = travelPath.lookPoints[0] - transform.position;
+        dir.Normalize();
+        float finalRotationAngleZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        Quaternion finalRotation = Quaternion.Euler(0.0f, 0.0f, finalRotationAngleZ);
+        transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.deltaTime * 50.0f);
+
+        float speedPercent = 1.0f;
+        
+        while (followingPath)
+        {
+            Vector2 pos = new Vector2(transform.position.x, transform.position.y);
+            while (travelPath.turnBoundaries[pathIndex].HasCrossedLine(pos))
             {
-                Vector2 pos = new Vector2(transform.position.x, transform.position.y);
-                while (travelPath.turnBoundaries[pathIndex].HasCrossedLine(pos))
+                if (pathIndex == travelPath.finishLineIndex)
                 {
-                    if (pathIndex == travelPath.finishLineIndex)
+                    followingPath = false;
+                    break;
+                }
+                else
+                {
+                    pathIndex++;
+                }
+            }
+
+            if (followingPath)
+            {
+                if (pathIndex >= travelPath.slowDownIndex && stoppingDist > 0)
+                {
+                    speedPercent = travelPath.turnBoundaries[travelPath.finishLineIndex].DistFromPoint(pos) /
+                                   stoppingDist;
+                    speedPercent = Mathf.Clamp01(speedPercent);
+
+                    if (speedPercent <= 0.05f)
                     {
                         followingPath = false;
-                        break;
-                    }
-                    else
-                    {
-                        pathIndex++;
                     }
                 }
-    
-                if (followingPath)
-                {
-                    if (pathIndex >= travelPath.slowDownIndex && stoppingDist > 0)
-                    {
-                        speedPercent = travelPath.turnBoundaries[travelPath.finishLineIndex].DistFromPoint(pos) /
-                                       stoppingDist;
-                        speedPercent = Mathf.Clamp01(speedPercent);
-    
-                        if (speedPercent <= 0.05f)
-                        {
-                            followingPath = false;
-                        }
-                    }
-    
-                    dir = travelPath.lookPoints[pathIndex] - transform.position;
-                    dir.Normalize();
-                    finalRotationAngleZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                    finalRotation = Quaternion.Euler(0.0f, 0.0f, finalRotationAngleZ);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.deltaTime * 50.0f);
-                    
-                    transform.Translate(Vector3.right * moveSpeed * speedPercent * Time.deltaTime, Space.Self);
-                }
+
+                dir = travelPath.lookPoints[pathIndex] - transform.position;
+                dir.Normalize();
+                finalRotationAngleZ = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                finalRotation = Quaternion.Euler(0.0f, 0.0f, finalRotationAngleZ);
+                transform.rotation = Quaternion.Slerp(transform.rotation, finalRotation, Time.deltaTime * 50.0f);
                 
-                yield return null;
+                transform.Translate(Vector3.right * moveSpeed * speedPercent * Time.deltaTime, Space.Self);
             }
+            
+            yield return null;
         }
+
+        enemy.enemyStateManager.PathMovementCompleted();
+    }
 
     #endregion
 
+    #region Going Back To Spawn
+
+    public void GoBackToSpawn()
+    {
+        if (updatePathCoroutine != null)
+        {
+            StopCoroutine(updatePathCoroutine);
+        }
+        
+        updatePathCoroutine = StartCoroutine(UpdatePathToSpawn());
+    }
+
+    #endregion
+    
     #region Container Oscillation
 
     public void TriggerOscillateContainerUpAndDown(bool oscillate, float speed, float amplitude)
